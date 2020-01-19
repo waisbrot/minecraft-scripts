@@ -70,6 +70,7 @@ function config_menu()
       win.setTextColor(colors.green)
       win.write(SETTINGS[selected] .. ": ")
       local val = read()
+      val = val:gsub("^%s*(.-)%s*$", "%1")
       settings.set(SETTINGS[selected], val)
     else
       done = true
@@ -92,6 +93,7 @@ end
 
 function pull(file)
   local url = "https://raw.githubusercontent.com/" .. settings.get("orgname") .. "/" .. settings.get("reponame") .. "/master/" .. file .. ".lua"
+  print("Fetching from " .. url)
   local dataHandle = http.get(url)
   local outHandle = fs.open(file, "w")
   outHandle.write(dataHandle.readAll())
