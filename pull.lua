@@ -1,6 +1,4 @@
-
 local SETTINGS_FILE = "pull.settings"
-
 local SETTINGS = {"orgname", "reponame", "clobber"}
 local SETTING_DEFAULTS = {"", "", true}
 
@@ -99,6 +97,7 @@ function pull(file)
   outHandle.write(dataHandle.readAll())
   outHandle.close()
   dataHandle.close()
+  term.setTextColor(colors.green)
   print("Wrote " .. file)
 end
 
