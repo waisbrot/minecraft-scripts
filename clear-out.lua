@@ -15,7 +15,7 @@ function update_pos(distance)
   elseif facing == "south" then z = z + distance
   elseif facing == "west" then x = x - distance
   elseif facing == "east" then x = x + distance
-  else error("Invalid facing")
+  else error("Invalid facing: " .. facing)
   end
 end
 
