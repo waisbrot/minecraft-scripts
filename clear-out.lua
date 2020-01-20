@@ -98,7 +98,7 @@ function orient()
 end
 
 function dig_forward()
-  turtle.dig()
+  while turtle.dig() do end
   forward()
   turtle.digUp()
   turtle.digDown()
