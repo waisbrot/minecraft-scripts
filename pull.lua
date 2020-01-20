@@ -90,6 +90,7 @@ function configure()
 end
 
 function pull(file)
+  settings.load(SETTINGS_FILE)
   local url = "https://raw.githubusercontent.com/" .. settings.get("orgname") .. "/" .. settings.get("reponame") .. "/master/" .. file .. ".lua"
   print("Fetching from " .. url)
   local dataHandle = http.get(url)
