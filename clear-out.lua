@@ -4,6 +4,11 @@ function newline(win)
   win.setCursorPos(1, cY+1)
 end
 
+function log(msg)
+  term.setSetTextColor(colors.cyan)
+  print(msg)
+end
+
 -- north: -Z
 -- west: -X
 
@@ -47,10 +52,32 @@ function down(err_msg)
   y = y - 1
 end
 
+function left()
+  assert(turtle.turnLeft(), "Failed to turn left")
+  if facing == "north" then facing = "west"
+  elseif facing == "west" then facing = "south"
+  elseif facing == "south" then facing = "east"
+  elseif facing == "east" then facing = "north"
+  else error("Invalid facing: " .. facing)
+  end
+end
+
+function right()
+  assert(turtle.turnRight(), "Failed to turn right")
+  if facing == "north" then facing = "east"
+  elseif facing == "west" then facing = "north"
+  elseif facing == "south" then facing = "west"
+  elseif facing == "east" then facing = "south"
+  else error("Invalid facing: " .. facing)
+  end
+end
+
 -- fill in the turtle's facing and absolute position
 function orient()
+  log("Locating...")
   x, y, z = gps.locate(10)
   assert(x, "GPS location failed!")
+  log("Find facing...")
   forward("No space in front of the turtle! Start the turtle with an empty space in front of it.")
   local xp, yp, zp = gps.locate(10)
   assert(xp, "GPS second location failed!")
@@ -65,7 +92,9 @@ function orient()
   else
     error("Unable to determine turtle's facing")
   end
+  log("Return to start")
   back()
+  log("Ready!")
 end
 
 function dig_forward()
@@ -83,13 +112,13 @@ end
 
 function dig_out_back(size)
   dig_row(size)
-  turtle.turnLeft()
+  left()
   dig_forward()
-  turtle.turnLeft()
+  left()
   dig_row(size)
-  turtle.turnRight()
+  right()
   dig_forward()
-  turtle.turnRight()
+  right()
 end
 
 function dig_rows(count, length)
