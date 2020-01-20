@@ -5,7 +5,7 @@ function newline(win)
 end
 
 function log(msg)
-  term.setSetTextColor(colors.cyan)
+  term.setTextColor(colors.cyan)
   print(msg)
 end
 
