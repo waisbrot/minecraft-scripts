@@ -204,10 +204,25 @@ function move_step(want)
   end
 end
 
+function stringify_coordinates(c)
+  return "(" .. c[1] .. "," .. c[2] .. "," .. c[3] .. ")"
+end
+
+function stringify_path(p)
+  if #p == 0 then
+    return ""
+  end
+  local buff = p[1]
+  for i=2,#p do
+    buff = buff .. ", " .. p[i]
+  end
+  return buff
+end
+
 function move_to(tx, ty, tz)
-  log("move to " .. {tx, ty, tz})
+  log("move to " .. stringify_coordinates({tx, ty, tz}))
   local path = path_to(tx, tz, tz)
-  log("path: " .. path)
+  log("path: " .. stringify_path(path))
   for n=1,#path do
     log("move: " .. path[n])
     move_step(path[n])
