@@ -16,10 +16,10 @@ local facing = nil
 local x, y, z = nil, nil, nil
 
 function update_pos(distance)
-  if facing == "north" then z = z - distance
-  elseif facing == "south" then z = z + distance
-  elseif facing == "west" then x = x - distance
-  elseif facing == "east" then x = x + distance
+  if facing == "n" then z = z - distance
+  elseif facing == "s" then z = z + distance
+  elseif facing == "w" then x = x - distance
+  elseif facing == "e" then x = x + distance
   else error("Invalid facing: " .. facing)
   end
 end
@@ -54,20 +54,20 @@ end
 
 function left()
   assert(turtle.turnLeft(), "Failed to turn left")
-  if facing == "north" then facing = "west"
-  elseif facing == "west" then facing = "south"
-  elseif facing == "south" then facing = "east"
-  elseif facing == "east" then facing = "north"
+  if facing == "n" then facing = "w"
+  elseif facing == "w" then facing = "s"
+  elseif facing == "s" then facing = "e"
+  elseif facing == "e" then facing = "n"
   else error("Invalid facing: " .. facing)
   end
 end
 
 function right()
   assert(turtle.turnRight(), "Failed to turn right")
-  if facing == "north" then facing = "east"
-  elseif facing == "west" then facing = "north"
-  elseif facing == "south" then facing = "west"
-  elseif facing == "east" then facing = "south"
+  if facing == "n" then facing = "e"
+  elseif facing == "w" then facing = "n"
+  elseif facing == "s" then facing = "w"
+  elseif facing == "e" then facing = "s"
   else error("Invalid facing: " .. facing)
   end
 end
@@ -82,13 +82,13 @@ function orient()
   local xp, yp, zp = gps.locate(10)
   assert(xp, "GPS second location failed!")
   if xp < x then
-    facing = "west"
+    facing = "w"
   elseif xp > x then
-    facing = "east"
+    facing = "e"
   elseif zp < z then
-    facing = "north"
+    facing = "n"
   elseif zp > z then
-    facing = "south"
+    facing = "s"
   else
     error("Unable to determine turtle's facing")
   end
@@ -127,6 +127,90 @@ function dig_rows(count, length)
   end
 end
 
+function path_to(dx, dy, dz)
+  local path = {}
+
+  while dy > y do
+    table.insert(path, "u")
+    dy = dy - 1
+  end
+  while dy < y do
+    table.insert(path, "d")
+    dy = dy + 1
+  end
+
+  while dz > z do
+    table.insert(path, "s")
+    dz = dz - 1
+  end
+  while dz < z do
+    table.insert(path, "n")
+    dz = dz + 1
+  end
+
+  while dx > x do
+    table.insert(path, "e")
+    dx = dx - 1
+  end
+  while dx < x do
+    table.insert(path, "w")
+    dx = dx + 1
+  end
+
+  return path
+end
+
+function about_face()
+  left()
+  left()
+end
+
+function change_facing(want)
+  if want == facing then return
+  elseif facing == "e" then
+    if want == "w" then about_face()
+    elseif want == "n" then left()
+    elseif want == "s" then right()
+    else error("bad facing")
+    end
+  elseif facing == "n" then
+    if want == "s" then about_face()
+    elseif want == "e" then right()
+    elseif want == "w" then left()
+    else error("bad facing")
+    end
+  elseif facing == "w" then
+    if want == "e" then about_face()
+    elseif want == "s" then left()
+    elseif want == "n" then right()
+    else error("bad facing")
+    end
+  elseif facing == "s" then
+    if want == "n" then about_face()
+    elseif want == "w" then right()
+    elseif want == "e" then left()
+    else error("bad facing")
+    end
+  else error("bad facing")
+  end
+end
+
+function move_step(want)
+  if want == "u" then up()
+  elseif want == "d" then down()
+  else
+    change_facing(want)
+    forward()
+  end
+end
+
+function move_to(tx, ty, tz)
+  local path = path_to(tx, tz, tz)
+  for step in path do
+    move_step(step)
+  end
+end
+
 function dig_space(wx, wy, wz)
   assert(wy >= 3, "Must be at least 3 blocks high")
   assert(wy == 3, "Larger than height 3 unimplemented")
@@ -135,9 +219,10 @@ function dig_space(wx, wy, wz)
 --  assert(found, "Need to start hovering over a chest")
 --  assert(item.name == "minecraft:chest", "Need to start hovering over a chest")
   local sx, sy, sz = x, y, z
-  if facing == "north" or facing == "south" then dig_rows(wx, wz)
+  if facing == "n" or facing == "s" then dig_rows(wx, wz)
   else dig_rows(wz, wx)
   end
+  move_to(sx, sy, sz)
 end
 
 dig_space(tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]))
