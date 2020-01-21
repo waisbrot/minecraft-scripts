@@ -1,3 +1,5 @@
+local MAX_PATH_PRINT = 10
+
 function newline(win)
   win = win or term
   local _,cY = win.getCursorPos()
@@ -213,8 +215,12 @@ function stringify_path(p)
     return ""
   end
   local buff = p[1]
-  for i=2,#p do
+  local len = math.min(MAX_PATH_PRINT, #p)
+  for i=2,len do
     buff = buff .. ", " .. p[i]
+  end
+  if len == MAX_PATH_PRINT then
+    buff = buff .. ", ..."
   end
   return buff
 end
