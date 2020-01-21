@@ -11,17 +11,25 @@ function log(msg)
   print(msg)
 end
 
+function Coordinates(cx, cy, cz)
+  return {
+    x = cx
+    y = cy
+    z = cz
+  }
+end
+
 -- north: -Z
 -- west: -X
 
 local facing = nil
-local x, y, z = nil, nil, nil
+local position = Coordinates(nil, nil, nil)
 
 function update_pos(distance)
-  if facing == "n" then z = z - distance
-  elseif facing == "s" then z = z + distance
-  elseif facing == "w" then x = x - distance
-  elseif facing == "e" then x = x + distance
+  if facing == "n" then position.z = position.z - distance
+  elseif facing == "s" then position.z = position.z + distance
+  elseif facing == "w" then position.x = position.x - distance
+  elseif facing == "e" then position.x = position.x + distance
   else error("Invalid facing: " .. facing)
   end
 end
@@ -44,14 +52,14 @@ end
 function up(err_msg)
   err_msg = err_msg or "Cannot move up!"
   assert(turtle.up(), err_msg)
-  y = y + 1
+  position.y = position.y + 1
 end
 
 -- down or error
 function down(err_msg)
   err_msg = err_msg or "Cannot move down!"
   assert(turtle.down(), err_msg)
-  y = y - 1
+  position.y = position.y - 1
 end
 
 function left()
@@ -77,19 +85,19 @@ end
 -- fill in the turtle's facing and absolute position
 function orient()
   log("Locating...")
-  x, y, z = gps.locate(10)
-  assert(x, "GPS location failed!")
+  position.x, position.y, position.z = gps.locate(10)
+  assert(position.x, "GPS location failed!")
   log("Find facing...")
   assert(turtle.forward(), "No space in front of the turtle! Start the turtle with an empty space in front of it.")
   local xp, yp, zp = gps.locate(10)
   assert(xp, "GPS second location failed!")
-  if xp < x then
+  if xp < position.x then
     facing = "w"
-  elseif xp > x then
+  elseif xp > position.x then
     facing = "e"
-  elseif zp < z then
+  elseif zp < position.z then
     facing = "n"
-  elseif zp > z then
+  elseif zp > position.z then
     facing = "s"
   else
     error("Unable to determine turtle's facing")
@@ -129,34 +137,34 @@ function dig_rows(count, length)
   end
 end
 
-function path_to(dx, dy, dz)
+function path_to(dest)
   local path = {}
 
-  while dy > y do
+  while dest.y > position.y do
     table.insert(path, "u")
-    dy = dy - 1
+    dest.y = dest.y - 1
   end
-  while dy < y do
+  while dest.y < position.y do
     table.insert(path, "d")
-    dy = dy + 1
+    dest.y = dest.y + 1
   end
 
-  while dz > z do
+  while dest.z > position.z do
     table.insert(path, "s")
-    dz = dz - 1
+    dest.z = dest.z - 1
   end
-  while dz < z do
+  while dest.z < position.z do
     table.insert(path, "n")
-    dz = dz + 1
+    dest.z = dest.z + 1
   end
 
-  while dx > x do
+  while dest.x > position.x do
     table.insert(path, "e")
-    dx = dx - 1
+    dest.x = dest.x - 1
   end
-  while dx < x do
+  while dest.x < position.x do
     table.insert(path, "w")
-    dx = dx + 1
+    dest.x = dest.x + 1
   end
 
   return path
@@ -225,9 +233,9 @@ function stringify_path(p)
   return buff
 end
 
-function move_to(tx, ty, tz)
-  log("move from " .. stringify_coordinates({x, y, z}) .. " to " .. stringify_coordinates({tx, ty, tz}))
-  local path = path_to(tx, tz, tz)
+function move_to(dest)
+  log("move from " .. stringify_coordinates(position) .. " to " .. stringify_coordinates(dest)
+  local path = path_to(dest)
   log("path: " .. stringify_path(path))
   for n=1,#path do
     log("move: " .. path[n])
@@ -242,11 +250,11 @@ function dig_space(wx, wy, wz)
 --  local found, item = turtle.inspectDown()
 --  assert(found, "Need to start hovering over a chest")
 --  assert(item.name == "minecraft:chest", "Need to start hovering over a chest")
-  local sx, sy, sz = x, y, z
+  local start = Coordinates(x, y, z)
   if facing == "n" or facing == "s" then dig_rows(wx, wz)
   else dig_rows(wz, wx)
   end
-  move_to(sx, sy, sz)
+  move_to(start)
 end
 
 dig_space(tonumber(arg[1]), tonumber(arg[2]), tonumber(arg[3]))
