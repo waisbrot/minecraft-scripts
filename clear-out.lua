@@ -205,9 +205,12 @@ function move_step(want)
 end
 
 function move_to(tx, ty, tz)
+  log("move to " .. {tx, ty, tz})
   local path = path_to(tx, tz, tz)
-  for step in path do
-    move_step(step)
+  log("path: " .. path)
+  for n=1,#path do
+    log("move: " .. path[n])
+    move_step(path[n])
   end
 end
 
