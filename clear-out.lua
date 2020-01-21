@@ -233,7 +233,7 @@ function stringify_path(p)
 end
 
 function move_to(dest)
-  log("move from " .. position:tostring() .. " to " .. dest:tostring)
+  log("move from " .. position:tostring() .. " to " .. dest:tostring())
   local path = path_to(dest)
   log("path: " .. stringify_path(path))
   for n=1,#path do
@@ -249,7 +249,7 @@ function dig_space(wx, wy, wz)
 --  local found, item = turtle.inspectDown()
 --  assert(found, "Need to start hovering over a chest")
 --  assert(item.name == "minecraft:chest", "Need to start hovering over a chest")
-  local start = Coordinates(x, y, z)
+  local start = Coordinates(position.x, position.y, position.z)
   if facing == "n" or facing == "s" then dig_rows(wx, wz)
   else dig_rows(wz, wx)
   end
