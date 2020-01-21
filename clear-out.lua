@@ -234,7 +234,7 @@ function stringify_path(p)
 end
 
 function move_to(dest)
-  log("move from " .. stringify_coordinates(position) .. " to " .. stringify_coordinates(dest)
+  log("move from " .. stringify_coordinates(position) .. " to " .. stringify_coordinates(dest))
   local path = path_to(dest)
   log("path: " .. stringify_path(path))
   for n=1,#path do
