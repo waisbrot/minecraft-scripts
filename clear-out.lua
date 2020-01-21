@@ -13,8 +13,8 @@ end
 
 function Coordinates(cx, cy, cz)
   return {
-    x = cx
-    y = cy
+    x = cx,
+    y = cy,
     z = cz
   }
 end
@@ -215,7 +215,7 @@ function move_step(want)
 end
 
 function stringify_coordinates(c)
-  return "(" .. c[1] .. "," .. c[2] .. "," .. c[3] .. ")"
+  return "(" .. c.x .. "," .. c.y .. "," .. c.z .. ")"
 end
 
 function stringify_path(p)
