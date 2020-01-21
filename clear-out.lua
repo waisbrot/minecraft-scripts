@@ -226,7 +226,7 @@ function stringify_path(p)
 end
 
 function move_to(tx, ty, tz)
-  log("move to " .. stringify_coordinates({tx, ty, tz}))
+  log("move from " .. stringify_coordinates({x, y, z}) .. " to " .. stringify_coordinates({tx, ty, tz}))
   local path = path_to(tx, tz, tz)
   log("path: " .. stringify_path(path))
   for n=1,#path do
