@@ -15,7 +15,10 @@ function Coordinates(cx, cy, cz)
   return {
     x = cx,
     y = cy,
-    z = cz
+    z = cz,
+    tostring = function (self)
+      return "(" .. tostring(self.x) .. "," .. tostring(self.y) .. "," .. tostring(self.z) .. ")"
+    end
   }
 end
 
@@ -214,10 +217,6 @@ function move_step(want)
   end
 end
 
-function stringify_coordinates(c)
-  return "(" .. c.x .. "," .. c.y .. "," .. c.z .. ")"
-end
-
 function stringify_path(p)
   if #p == 0 then
     return ""
@@ -234,7 +233,7 @@ function stringify_path(p)
 end
 
 function move_to(dest)
-  log("move from " .. stringify_coordinates(position) .. " to " .. stringify_coordinates(dest))
+  log("move from " .. position:tostring() .. " to " .. dest:tostring)
   local path = path_to(dest)
   log("path: " .. stringify_path(path))
   for n=1,#path do
