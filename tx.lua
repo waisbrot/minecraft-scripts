@@ -3,9 +3,11 @@
 function find_modem()
     local side
     for s in {"left", "right", "front", "back"} do
-      if peripheral.isPresent(s) && peripheral.getType(s) == "modem" then
-        side = s
-        break
+      if peripheral.isPresent(s) then
+        if peripheral.getType(s) == "modem" then
+            side = s
+            break
+        end
       end
     end
     return side
