@@ -393,4 +393,12 @@ function md5.sumhexa(s)
   return md5.tohex(md5.sum(s))
 end
 
-return md5
+function sum_file(filename)
+  local s = md5.new()
+  local fh = fs.open(filename, "r")
+  local line = fh.readLine()
+  while line ~= nil do
+    s:update(line)
+  end
+  return md5.tohex(s:finish())
+end
