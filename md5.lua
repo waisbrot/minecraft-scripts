@@ -399,7 +399,7 @@ function sum_file(filename)
   local line = fh.readLine()
   while line ~= nil do
     s:update(line)
-    print(".")
+    line = fh.readLine()
   end
   return md5.tohex(s:finish())
 end

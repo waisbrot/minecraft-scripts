@@ -56,6 +56,7 @@ local function add_lib(lib)
     assert(os.loadAPI(full_path), "Failed to load "..lib)
     local libs = settings.get("startup_libraries")
     table.insert(libs, lib)
+    print("Startup libs: "..libs)
     settings.set("startup_libraries", libs)
     settings.save("/.settings")
 end
