@@ -54,7 +54,7 @@ local function boot()
     print("Ready")
 end
 
-local function add_item(item, list) do
+local function add_item(item, list)
     for _, eitem in ipairs(list) do
         if eitem == item then
             print("Already present: " .. item)
@@ -88,8 +88,11 @@ local function add_job(job_name, job)
     settings.save("/.settings")
 end
 
-if #arg == 0 then boot()
-elseif arg[1] == '+lib' then add_lib(arg[2])
-elseif arg[1] == '+job' then add_job(arg[2], arg[3])
-else print("Usage: startup [+lib <lib> | +job <name> <job>]")
+function main()
+    if #arg == 0 then boot()
+    elseif arg[1] == '+lib' then add_lib(arg[2])
+    elseif arg[1] == '+job' then add_job(arg[2], arg[3])
+    else print("Usage: startup [+lib <lib> | +job <name> <job>]")
+    end
 end
+
