@@ -2,6 +2,7 @@ local function init_config()
     settings.set("startup_libraries", {})
     settings.set("startup_libdir", "/lib")
     settings.set("startup_jobs", {})
+    settings.set("startup_is_configured", true)
 
     settings.save("/.settings")
     print("Initialized settings")
@@ -32,12 +33,16 @@ local function load_libraries()
     end
 end
 
+local function start_job(job_name, job)
+    print("Starting "..job)
+    local job_id = multishell.launch({}, job, "--boot")
+    multishell.setTitle(job_id, job_name)
+end
+
 local function start_jobs()
     local jobs = settings.get("startup_jobs")
     for job_name, job in ipairs(jobs) do
-        print("Starting "..job)
-        local job_id = multishell.launch({}, job, "--boot")
-        multishell.setTitle(job_id, job_name)
+        start_job(job_name, job)
     end
 end
 
@@ -49,15 +54,37 @@ local function boot()
     print("Ready")
 end
 
+local function add_item(item, list) do
+    for _, eitem in ipairs(list) do
+        if eitem == item then
+            print("Already present: " .. item)
+            return false
+        end
+    end
+    table.insert(list, item)
+    return true
+end
+
 local function add_lib(lib)
     local libdir = settings.get("startup_libdir")
     local full_path = fs.combine(libdir, lib)
     assert(fs.exists(full_path), "Unable to find library "..lib.." at "..full_path)
     assert(os.loadAPI(full_path), "Failed to load "..lib)
     local libs = settings.get("startup_libraries")
-    table.insert(libs, lib)
-    print("Startup libs: "..libs)
+    add_item(lib, libs)
     settings.set("startup_libraries", libs)
+    settings.save("/.settings")
+end
+
+local function add_job(job_name, job)
+    local jobs = settings.get("startup_jobs")
+    if jobs[job_name] ~= nil then
+        print("Already present: " .. job_name)
+        return
+    end
+    start_job(job_name, job)
+    jobs[job_name] = job
+    settings.set("startup_jobs")
     settings.save("/.settings")
 end
 
