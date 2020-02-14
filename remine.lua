@@ -313,13 +313,13 @@ end
 function start_server(hostname)
   orient()
   local modem_side = find_modem()
-  assert(side != nil, "Could not find a modem")
+  assert(side ~= nil, "Could not find a modem")
   print("Found modem")
   rednet.open(modem_side)
   rednet.host("remine", hostname)
   print("Registered as "..hostname)
   local continue = true
-  while continue
+  while continue do
     print("Waiting for remote command C-T to exit")
     local sender, message, _ = rednet.receive("remine")
     if commands[message[1]] ~= nil then
