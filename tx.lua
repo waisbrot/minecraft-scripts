@@ -7,12 +7,13 @@ for i = 2, #arg, 1 do
   command[i-1] = arg[i]
 end
 local modem_side = libnjw.find_modem()
+assert(modem_side ~= nil, "No modem found")
 rednet.open(modem_side)
-local hosts = rednet.lookup(protocol)
-if (hosts == nil) or (#hosts < 1) then
-  print("No host found")
-  os.exit()
-end
-rednet.send(hosts[1], command, protocol)
+print("Finding a host for " .. protocol)
+local host = rednet.lookup(protocol)
+assert(host ~= nil, "No host found for protocol " .. protocol)
+print("Sending message to " .. host)
+rednet.send(host, command, protocol)
+print("Waiting for reply")
 local response = rednet.receive(protocol, 5)
-print(response)
+print(inspect.dump(response))

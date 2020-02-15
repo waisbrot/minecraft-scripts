@@ -300,7 +300,7 @@ local commands = {
 function start_server(hostname)
   orient()
   local modem_side = libnjw.find_modem()
-  assert(side ~= nil, "Could not find a modem")
+  assert(modem_side ~= nil, "Could not find a modem")
   print("Found modem")
   rednet.open(modem_side)
   rednet.host("remine", hostname)
