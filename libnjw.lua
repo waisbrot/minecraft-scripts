@@ -14,3 +14,15 @@ function find_modem()
     end
     return side
 end
+
+function log(msg)
+  term.setTextColor(colors.cyan)
+  print(msg)
+end
+
+function newline(win)
+  win = win or term
+  local _,cY = win.getCursorPos()
+  win.setCursorPos(1, cY+1)
+end
+
