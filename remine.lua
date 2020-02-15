@@ -297,22 +297,9 @@ local commands = {
   status = do_status
 }
 
-function find_modem()
-  local side
-  for _, s in ipairs({"left", "right", "front", "back"}) do
-    if peripheral.isPresent(s) then
-      if peripheral.getType(s) == "modem" then
-       side = s
-       break
-      end
-    end
-  end
-  return side
-end
-
 function start_server(hostname)
   orient()
-  local modem_side = find_modem()
+  local modem_side = libnjw.find_modem()
   assert(side ~= nil, "Could not find a modem")
   print("Found modem")
   rednet.open(modem_side)
