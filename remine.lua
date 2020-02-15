@@ -289,6 +289,7 @@ function do_status(sender, message)
     facing = facing,
     position = position
   }
+  print("Sending status")
   rednet.send(sender, reply)
   return true
 end
@@ -310,7 +311,10 @@ function start_server(hostname)
     print("Waiting for remote command C-T to exit")
     local sender, message, _ = rednet.receive("remine")
     if commands[message[1]] ~= nil then
+      print("Command '" .. message[1] .. "' from " .. sender)
       continue = commands[message[1]](sender, message)
+    else
+      print("Invalid message from " .. sender .. ": " .. inspect.dump(message))
     end
   end
 end
