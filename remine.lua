@@ -6,15 +6,27 @@ local log = libnjw.log
 function do_status(sender, message)
   reply = {
     facing = libturtle.facing,
-    position = libturtle.position
+    position = libturtle.position,
   }
   log("Sending status")
   rednet.send(sender, reply, PROTOCOL)
   return true
 end
 
+function do_move_to(sender, message)
+  local _, x, y, z = message
+  local dest = libturtle.Coordinates(math.floor(x), math.floor(y), math.floor(z))
+  reply = {
+    destination = dest
+  }
+  rednet.send(sender, reply, PROTOCOL)
+  libturtle.move_to(dest)
+  return true
+end
+
 local commands = {
   status = do_status
+  moveTo = do_move_to
 }
 
 function start_server(hostname)
