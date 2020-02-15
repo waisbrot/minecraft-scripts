@@ -25,8 +25,8 @@ function do_move_to(sender, message)
 end
 
 local commands = {
-  status = do_status
-  moveTo = do_move_to
+  status = do_status,
+  moveTo = do_move_to,
 }
 
 function start_server(hostname)
