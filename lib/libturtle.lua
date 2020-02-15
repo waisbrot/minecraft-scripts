@@ -1,3 +1,5 @@
+local log = libnjw.log
+
 function Coordinates(cx, cy, cz)
   return {
     x = cx,
