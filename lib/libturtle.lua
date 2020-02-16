@@ -39,7 +39,7 @@ function Position:update_from_move(distance)
   elseif self.facing == "s" then self.z = self.z + distance
   elseif self.facing == "w" then self.x = self.x - distance
   elseif self.facing == "e" then self.x = self.x + distance
-  else error("Invalid facing: " .. tostring(self.facing)
+  else error("Invalid facing: " .. tostring(self.facing))
   end
 end
 
