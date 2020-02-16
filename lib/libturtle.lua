@@ -150,32 +150,33 @@ end
 
 function path_to(dest)
   local path = {}
+  local bpath = {table.unpack(dest)}
 
-  while dest.y > position.y do
+  while bpath.y > position.y do
     table.insert(path, "u")
-    dest.y = dest.y - 1
+    bpath.y = bpath.y - 1
   end
-  while dest.y < position.y do
+  while bpath.y < position.y do
     table.insert(path, "d")
-    dest.y = dest.y + 1
+    bpath.y = bpath.y + 1
   end
 
-  while dest.z > position.z do
+  while bpath.z > position.z do
     table.insert(path, "s")
-    dest.z = dest.z - 1
+    bpath.z = bpath.z - 1
   end
-  while dest.z < position.z do
+  while bpath.z < position.z do
     table.insert(path, "n")
-    dest.z = dest.z + 1
+    bpath.z = bpath.z + 1
   end
 
-  while dest.x > position.x do
+  while bpath.x > position.x do
     table.insert(path, "e")
-    dest.x = dest.x - 1
+    bpath.x = bpath.x - 1
   end
-  while dest.x < position.x do
+  while bpath.x < position.x do
     table.insert(path, "w")
-    dest.x = dest.x + 1
+    bpath.x = bpath.x + 1
   end
 
   return path
@@ -226,6 +227,7 @@ function move_step(want)
 end
 
 function stringify_path(p)
+  assert(p ~= nil, "nil path")
   if #p == 0 then
     return ""
   end
