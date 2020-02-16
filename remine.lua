@@ -5,7 +5,6 @@ local log = libnjw.log
 
 function do_status(sender, message)
   reply = {
-    facing = libturtle.facing,
     position = libturtle.position,
   }
   log("Sending status")

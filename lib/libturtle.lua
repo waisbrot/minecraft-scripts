@@ -39,25 +39,25 @@ function Position:update_from_move(distance)
   elseif self.facing == "s" then self.z = self.z + distance
   elseif self.facing == "w" then self.x = self.x - distance
   elseif self.facing == "e" then self.x = self.x + distance
-  else error("Invalid facing: " .. self.facing)
+  else error("Invalid facing: " .. tostring(self.facing)
   end
 end
 
 function Position:turn_left()
-  if facing == "n" then facing = "w"
-  elseif facing == "w" then facing = "s"
-  elseif facing == "s" then facing = "e"
-  elseif facing == "e" then facing = "n"
-  else error("Invalid facing: " .. facing)
+  if self.facing == "n" then self.facing = "w"
+  elseif self.facing == "w" then self.facing = "s"
+  elseif self.facing == "s" then self.facing = "e"
+  elseif self.facing == "e" then self.facing = "n"
+  else error("Invalid facing: " .. tostring(self.facing))
   end
 end
 
 function Position:turn_right()
-  if facing == "n" then facing = "e"
-  elseif facing == "w" then facing = "n"
-  elseif facing == "s" then facing = "w"
-  elseif facing == "e" then facing = "s"
-  else error("Invalid facing: " .. facing)
+  if self.facing == "n" then self.facing = "e"
+  elseif self.facing == "w" then self.facing = "n"
+  elseif self.facing == "s" then self.facing = "w"
+  elseif self.facing == "e" then self.facing = "s"
+  else error("Invalid facing: " .. tostring(self.facing))
   end
 end
 
@@ -146,13 +146,13 @@ function orient()
   local xp, yp, zp = gps.locate(10)
   assert(xp, "GPS second location failed!")
   if xp < position.x then
-    facing = "w"
+    position.facing = "w"
   elseif xp > position.x then
-    facing = "e"
+    position.facing = "e"
   elseif zp < position.z then
-    facing = "n"
+    position.facing = "n"
   elseif zp > position.z then
-    facing = "s"
+    position.facing = "s"
   else
     error("Unable to determine turtle's facing")
   end
@@ -163,7 +163,7 @@ end
 
 -- Run orient() iff it hasn't been run since the turtle turned on
 function ensure_oriented()
-  if facing == nil then
+  if position.facing == nil then
     orient()
   else
     log("Existing orientation")
@@ -216,26 +216,26 @@ function about_face()
 end
 
 function change_facing(want)
-  if want == facing then return
-  elseif facing == "e" then
+  if want == position.facing then return
+  elseif position.facing == "e" then
     if want == "w" then about_face()
     elseif want == "n" then left()
     elseif want == "s" then right()
     else error("bad facing")
     end
-  elseif facing == "n" then
+  elseif position.facing == "n" then
     if want == "s" then about_face()
     elseif want == "e" then right()
     elseif want == "w" then left()
     else error("bad facing")
     end
-  elseif facing == "w" then
+  elseif position.facing == "w" then
     if want == "e" then about_face()
     elseif want == "s" then left()
     elseif want == "n" then right()
     else error("bad facing")
     end
-  elseif facing == "s" then
+  elseif position.facing == "s" then
     if want == "n" then about_face()
     elseif want == "w" then right()
     elseif want == "e" then left()
@@ -304,8 +304,8 @@ function dig_space(wx, wy, wz)
 --  assert(found, "Need to start hovering over a chest")
 --  assert(item.name == "minecraft:chest", "Need to start hovering over a chest")
   local start = Coordinates(position.x, position.y, position.z)
-  local start_face = facing
-  if facing == "n" or facing == "s" then dig_rows(wx, wz)
+  local start_face = position.facing
+  if position.facing == "n" or position.facing == "s" then dig_rows(wx, wz)
   else dig_rows(wz, wx)
   end
   move_to(start)
