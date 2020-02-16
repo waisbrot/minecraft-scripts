@@ -1,43 +1,115 @@
 local log = libnjw.log
 
-function Coordinates(cx, cy, cz)
-  return {
-    x = cx,
-    y = cy,
-    z = cz,
-    tostring = function (self)
-      return "(" .. tostring(self.x) .. "," .. tostring(self.y) .. "," .. tostring(self.z) .. ")"
-    end
-  }
+Position = {
+  x = nil,
+  y = nil,
+  z = nil,
+
+  -- north: -Z
+  -- west: -X
+  facing = nil,
+}
+
+function Position:new(x, y, z, facing)
+  local o = {x = x, y = y, z = z, facing = facing}
+  setmetatable(o, self)
+  self.__index = self
+  return o
 end
 
--- north: -Z
--- west: -X
+function Position:clone()
+  return Position:new(self.x, self.y, self.z)
+end
 
-facing = nil
-position = Coordinates(nil, nil, nil)
+function Position:tostring()
+  return "(" .. tostring(self.x) .. "," .. tostring(self.y) .. "," .. tostring(self.z) .. ")" .. ":" .. tostring(self.facing)
+end
 
-function update_pos(distance)
-  if facing == "n" then position.z = position.z - distance
-  elseif facing == "s" then position.z = position.z + distance
-  elseif facing == "w" then position.x = position.x - distance
-  elseif facing == "e" then position.x = position.x + distance
+position = Position:new()
+
+function Position:validate()
+  assert(self.x ~= nil, "nil x")
+  assert(self.y ~= nil, "nil y")
+  assert(self.z ~= nil, "nil z")
+  assert(self.facing ~= nil, "nil facing")
+end
+
+function Position:update_from_move(distance)
+  if self.facing == "n" then self.z = self.z - distance
+  elseif self.facing == "s" then self.z = self.z + distance
+  elseif self.facing == "w" then self.x = self.x - distance
+  elseif self.facing == "e" then self.x = self.x + distance
+  else error("Invalid facing: " .. self.facing)
+  end
+end
+
+function Position:turn_left()
+  if facing == "n" then facing = "w"
+  elseif facing == "w" then facing = "s"
+  elseif facing == "s" then facing = "e"
+  elseif facing == "e" then facing = "n"
   else error("Invalid facing: " .. facing)
   end
+end
+
+function Position:turn_right()
+  if facing == "n" then facing = "e"
+  elseif facing == "w" then facing = "n"
+  elseif facing == "s" then facing = "w"
+  elseif facing == "e" then facing = "s"
+  else error("Invalid facing: " .. facing)
+  end
+end
+
+function Position:path_to(dest)
+  self:validate()
+  dest:validate()
+
+  local path = {}
+  local bpath = dest:clone()
+
+  while bpath.y > self.y do
+    table.insert(path, "u")
+    bpath.y = bpath.y - 1
+  end
+  while bpath.y < self.y do
+    table.insert(path, "d")
+    bpath.y = bpath.y + 1
+  end
+
+  while bpath.z > self.z do
+    table.insert(path, "s")
+    bpath.z = bpath.z - 1
+  end
+  while bpath.z < self.z do
+    table.insert(path, "n")
+    bpath.z = bpath.z + 1
+  end
+
+  while bpath.x > self.x do
+    table.insert(path, "e")
+    bpath.x = bpath.x - 1
+  end
+  while bpath.x < self.x do
+    table.insert(path, "w")
+    bpath.x = bpath.x + 1
+  end
+
+  return path
 end
 
 -- forward or error
 function forward(err_msg)
   err_msg = err_msg or "Cannot move forward!"
   assert(turtle.forward(), err_msg)
-  update_pos(1)
+  position:update_from_move(1)
 end
 
 -- back or error
 function back(err_msg)
   err_msg = err_msg or "Cannot move back!"
   assert(turtle.back(), err_msg)
-  update_pos(-1)
+  position:update_from_move(-1)
 end
 
 -- up or error
@@ -56,22 +128,12 @@ end
 
 function left()
   assert(turtle.turnLeft(), "Failed to turn left")
-  if facing == "n" then facing = "w"
-  elseif facing == "w" then facing = "s"
-  elseif facing == "s" then facing = "e"
-  elseif facing == "e" then facing = "n"
-  else error("Invalid facing: " .. facing)
-  end
+  position:turn_left()
 end
 
 function right()
   assert(turtle.turnRight(), "Failed to turn right")
-  if facing == "n" then facing = "e"
-  elseif facing == "w" then facing = "n"
-  elseif facing == "s" then facing = "w"
-  elseif facing == "e" then facing = "s"
-  else error("Invalid facing: " .. facing)
-  end
+  position:turn_right()
 end
 
 -- fill in the turtle's facing and absolute position
@@ -148,40 +210,6 @@ function dig_rows(count, length)
   end
 end
 
-function path_to(dest)
-  local path = {}
-  local bpath = {table.unpack(dest)}
-
-  while bpath.y > position.y do
-    table.insert(path, "u")
-    bpath.y = bpath.y - 1
-  end
-  while bpath.y < position.y do
-    table.insert(path, "d")
-    bpath.y = bpath.y + 1
-  end
-
-  while bpath.z > position.z do
-    table.insert(path, "s")
-    bpath.z = bpath.z - 1
-  end
-  while bpath.z < position.z do
-    table.insert(path, "n")
-    bpath.z = bpath.z + 1
-  end
-
-  while bpath.x > position.x do
-    table.insert(path, "e")
-    bpath.x = bpath.x - 1
-  end
-  while bpath.x < position.x do
-    table.insert(path, "w")
-    bpath.x = bpath.x + 1
-  end
-
-  return path
-end
-
 function about_face()
   left()
   left()
@@ -244,7 +272,7 @@ end
 
 function move_to(dest)
   log("move from " .. position:tostring() .. " to " .. dest:tostring())
-  local path = path_to(dest)
+  local path = position:path_to(dest)
   log("path: " .. stringify_path(path))
   for i=1,#path do
     log("move: " .. path[i])
