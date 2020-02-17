@@ -12,13 +12,8 @@ function do_status(sender, message)
 end
 
 function do_move_to(sender, message)
-  local x, y, z, f = message[2], message[3], message[4], message[5]
-  local dest = libturtle.Position:new(math.floor(x), math.floor(y), math.floor(z), f)
-  reply = {
-    destination = dest
-  }
-  rednet.send(sender, reply, PROTOCOL)
-  libturtle.move_to(dest)
+  rednet.send(sender, "ACK", PROTOCOL)
+  libturtle.move_to(message.destination)
   return true
 end
 
@@ -39,9 +34,9 @@ function start_server(hostname)
   while continue do
     log("Waiting for remote command C-T to exit")
     local sender, message, _ = rednet.receive(PROTOCOL)
-    if commands[message[1]] ~= nil then
-      log(inspect.dump({sender = sender, message = message})
-      continue = commands[message[1]](sender, message)
+    if commands[message.command] ~= nil then
+      log(inspect.dump({sender = sender, message = message}))
+      continue = commands[message.command](sender, message)
     else
       log("Invalid message from " .. sender .. ": " .. inspect.dump(message))
     end

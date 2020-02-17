@@ -15,9 +15,19 @@ function find_modem()
     return side
 end
 
-function log(msg)
-  term.setTextColor(colors.cyan)
+function cprint(msg, clr)
+  local c = term.getTextColor()
+  term.setTextColor(clr)
   print(msg)
+  term.setTextColor(c)
+end
+
+function log(msg)
+  cprint(msg, colors.cyan)
+end
+
+function success(msg)
+  cprint(msg, colors.green)
 end
 
 function newline(win)
