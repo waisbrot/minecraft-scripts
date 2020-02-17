@@ -1,4 +1,5 @@
 local log = libnjw.log
+local MAX_PATH_PRINT = 10
 
 Position = {
   x = nil,

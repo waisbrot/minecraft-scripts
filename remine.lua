@@ -1,4 +1,3 @@
-local MAX_PATH_PRINT = 10
 local PROTOCOL = "remine"
 
 local log = libnjw.log
