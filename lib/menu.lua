@@ -14,8 +14,8 @@ local COLOR_SELECT_FG = colors.white
 function Menu:new()
   local o = {
     items = {},
-    original_bg = term.getBackgroundColor()
-    original_fg = term.getTextColor()
+    original_bg = term.getBackgroundColor(),
+    original_fg = term.getTextColor(),
   }
   local w, h = term.getSize()
   o.win = window.create(term.current(), 1, 1, w, h, false)
