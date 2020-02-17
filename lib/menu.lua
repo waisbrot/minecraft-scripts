@@ -3,11 +3,16 @@ Menu = {
   selected = 1,
 }
 
+local COLOR_UNSELECT_BG = colors.gray
+local COLOR_UNSELECT_FG = colors.white
+local COLOR_SELECT_BG = colors.lime
+local COLOR_SELECT_FG = colors.white
+
 function Menu:new()
   local w, h = term.getSize()
-  local win = window.create(term.current(), 0, 0, w, h, false)
-  win.setBackgroundColor(colors.gray)
-  win.setTextColor(colors.white)
+  local win = window.create(term.current(), 1, 1, w, h, false)
+  win.setBackgroundColor(COLOR_UNSELECT_BG)
+  win.setTextColor(COLOR_UNSELECT_FG)
   win.clear()
   local o = {
     items = {},
@@ -19,13 +24,13 @@ function Menu:new()
 end
 
 function Menu:pen_selected()
-  self.win.setBackgroundColor(colors.lime)
-  self.win.setTextColor(colors.black)
+  self.win.setBackgroundColor(COLOR_SELECT_BG)
+  self.win.setTextColor(COLOR_SELECT_FG)
 end
 
 function Menu:pen_unselected()
-  self.win.setBackgroundColor(colors.gray)
-  self.win.setTextColor(colors.white)
+  self.win.setBackgroundColor(COLOR_UNSELECT_BG)
+  self.win.setTextColor(COLOR_UNSELECT_FG)
 end
 
 function Menu:current_selection()
@@ -34,7 +39,7 @@ end
 
 -- print the currently-selected item
 function Menu:print_current_selection()
-  print(self:current_selection())
+  self.win.write(self:current_selection())
 end
 
 -- redraw as unselected the current selection
