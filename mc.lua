@@ -1,7 +1,7 @@
 -- miner-controller
 
-local log libnjw.log
-local success libnjw.success
+local log = libnjw.log
+local success = libnjw.success
 local PROTOCOL = "remine"
 
 local function do_status(host)
