@@ -12,8 +12,10 @@ function do_status(sender, message)
 end
 
 function do_move_to(sender, message)
+  local dest = libturtle.Position:new(message.destination)
+  dest:validate()
   rednet.send(sender, "ACK", PROTOCOL)
-  libturtle.move_to(message.destination)
+  libturtle.move_to(dest)
   return true
 end
 

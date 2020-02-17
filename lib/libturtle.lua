@@ -12,6 +12,16 @@ Position = {
 }
 
 function Position:new(x, y, z, facing)
+  if type(x) == "table" then
+    assert(y == nil)
+    assert(z == nil)
+    assert(facing == nil)
+    local orig = x
+    x = orig.x
+    y = orig.y
+    z = orig.z
+    facing = orig.facing
+  end
   local o = {x = x, y = y, z = z, facing = facing}
   setmetatable(o, self)
   self.__index = self
