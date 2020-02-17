@@ -13,8 +13,8 @@ function do_status(sender, message)
 end
 
 function do_move_to(sender, message)
-  local x, y, z = message[2], message[3], message[4]
-  local dest = libturtle.Coordinates(math.floor(x), math.floor(y), math.floor(z))
+  local x, y, z, f = message[2], message[3], message[4], message[5]
+  local dest = libturtle.Position:new(math.floor(x), math.floor(y), math.floor(z))
   reply = {
     destination = dest
   }
