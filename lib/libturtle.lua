@@ -279,6 +279,7 @@ function move_to(dest)
     log("move: " .. path[i])
     move_step(path[i])
   end
+  change_facing(dest.facing)
 end
 
 function dig_step(want)

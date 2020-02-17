@@ -13,7 +13,7 @@ end
 
 function do_move_to(sender, message)
   local x, y, z, f = message[2], message[3], message[4], message[5]
-  local dest = libturtle.Position:new(math.floor(x), math.floor(y), math.floor(z))
+  local dest = libturtle.Position:new(math.floor(x), math.floor(y), math.floor(z), f)
   reply = {
     destination = dest
   }
