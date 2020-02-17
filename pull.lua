@@ -94,6 +94,7 @@ function pull(file)
   local url = "https://raw.githubusercontent.com/" .. settings.get("orgname") .. "/" .. settings.get("reponame") .. "/master/" .. file .. ".lua"
   print("Fetching from " .. url)
   local dataHandle = http.get(url)
+  assert(dataHandle, "Nothing found at that address " .. url)
   local outHandle = fs.open(file, "w")
   outHandle.write(dataHandle.readAll())
   outHandle.close()
