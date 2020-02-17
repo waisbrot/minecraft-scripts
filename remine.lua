@@ -41,7 +41,7 @@ function start_server(hostname)
     log("Waiting for remote command C-T to exit")
     local sender, message, _ = rednet.receive(PROTOCOL)
     if commands[message[1]] ~= nil then
-      log("Command '" .. message[1] .. "' from " .. sender)
+      log(inspect.dump({sender = sender, message = message})
       continue = commands[message[1]](sender, message)
     else
       log("Invalid message from " .. sender .. ": " .. inspect.dump(message))
