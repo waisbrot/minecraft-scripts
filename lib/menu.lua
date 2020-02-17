@@ -53,8 +53,8 @@ end
 
 function Menu:add(item)
   table.insert(self.items, item)
-  self.win.setCursorPos(1, #items)
-  if #items == 1 then
+  self.win.setCursorPos(1, #self.items)
+  if #self.items == 1 then
     self.selected = 1
     self:pen_selected()
   else
@@ -66,7 +66,7 @@ end
 function Menu:up()
   self:redraw_unselected()
   if self.selected == 1 then
-    self.selected = #items
+    self.selected = #self.items
   else
     self.selected = self.selected - 1
   end
@@ -75,7 +75,7 @@ end
 
 function Menu:down()
   self:redraw_unselected()
-  if self.selected == #items then
+  if self.selected == #self.items then
     self.selected = 1
   else
     self.selected = self.selected + 1
