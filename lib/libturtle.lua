@@ -272,6 +272,8 @@ function stringify_path(p)
 end
 
 function move_to(dest)
+  assert(position)
+  assert(dest)
   log("move from " .. position:tostring() .. " to " .. dest:tostring())
   local path = position:path_to(dest)
   log("path: " .. stringify_path(path))

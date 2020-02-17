@@ -1,6 +1,9 @@
 Menu = {
   items = {},
+  win = nil,
   selected = 1,
+  original_bg = colors.black,
+  original_fg = colors.white,
 }
 
 local COLOR_UNSELECT_BG = colors.gray
@@ -9,15 +12,17 @@ local COLOR_SELECT_BG = colors.lime
 local COLOR_SELECT_FG = colors.white
 
 function Menu:new()
-  local w, h = term.getSize()
-  local win = window.create(term.current(), 1, 1, w, h, false)
-  win.setBackgroundColor(COLOR_UNSELECT_BG)
-  win.setTextColor(COLOR_UNSELECT_FG)
-  win.clear()
   local o = {
     items = {},
-    win = win,
+    original_bg = term.getBackgroundColor()
+    original_fg = term.getTextColor()
   }
+  local w, h = term.getSize()
+  o.win = window.create(term.current(), 1, 1, w, h, false)
+  o.win.setBackgroundColor(COLOR_UNSELECT_BG)
+  o.win.setTextColor(COLOR_UNSELECT_FG)
+  o.win.clear()
+
   setmetatable(o, self)
   self.__index = self
   return o
@@ -65,7 +70,7 @@ function Menu:add(item)
   else
     self:pen_unselected()
   end
-  print(item)
+  self.win.write(item)
 end
 
 function Menu:up()
@@ -90,12 +95,22 @@ end
 
 function Menu:display()
   self.win.setVisible(true)
-  while true do
+  local chose = nil
+  while chose == nil do
     local _, k = os.pullEvent("key")
     if k == keys.up then self:up()
     elseif k == keys.down then self:down()
-    elseif k == keys.enter then return self:current_selection()
-    elseif k == keys.backspace then return nil
+    elseif k == keys.enter then chose = true
+    elseif k == keys.backspace then chose = false
     end
+  end
+  self.win.setVisible(false)
+  term.setBackgroundColor(self.original_bg)
+  term.setTextColor(self.original_fg)
+  term.clear()
+  if chose then
+    return self:current_selection()
+  else
+    return nil
   end
 end
