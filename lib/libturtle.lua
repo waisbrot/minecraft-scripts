@@ -45,6 +45,15 @@ function Position:validate()
   assert(self.facing ~= nil, "nil facing")
 end
 
+function Position:from_gps(facing)
+  if facing == nil then
+    facing = "n"
+  end
+  local x, y, z = gps.locate(10)
+  assert(x)
+  return self:new(x, y, z, facing)
+end
+
 function Position:update_from_move(distance)
   if self.facing == "n" then self.z = self.z - distance
   elseif self.facing == "s" then self.z = self.z + distance

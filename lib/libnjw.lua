@@ -36,3 +36,6 @@ function newline(win)
   win.setCursorPos(1, cY+1)
 end
 
+function table.clone(t)
+  return {table.unpack(t)}
+end

@@ -25,9 +25,52 @@ local function do_come_here(host)
   success(inspect.dump(response))
 end
 
+local function gps_callback(name, key)
+  local x, y, z = gps.locate(5)
+  if name:sub(1, 1) == "x" then return {string = tostring(x)}
+  elseif name:sub(1, 1) == "y" then return {string = tostring(y)}
+  elseif name:sub(1, 1) == "z" then return {string = tostring(z)}
+  else error("Bad field name")
+  end
+end
+
+local function read_coordinates_live()
+  local cform = form.Form:new()
+  local items = {
+    {x = nil, y = nil, z = nil},
+    {x = nil, y = nil, z = nil},
+  }
+  for i=1,#items do
+    for j in {"x", "y", "z"} do
+      items[i][j] = form.Item:new(j .. tostring(i), [keys.g], gps_callback)
+      cform:add(items[i][j])
+    end
+  end
+  cform:display()
+  local result = {}
+  for i=1,#items do
+    local pos = libturtle.Position:new(math.floor(tonumber(items[i].x.value)),
+                                       math.floor(tonumber(items[i].y.value)),
+                                       math.floor(tonumber(items[i].z.value)))
+    table.insert(result, pos)
+  end
+  return result
+end
+
+local function do_dig_cube(host)
+  local coordinates = read_coordinates_live()
+  log("Asking " .. host .. " to dig a cube " .. inspect.dump(coordinates))
+  local request = { command = "digCube", points = coordinates }
+  rednet.send(host, request, PROTOCOL)
+  log("Waiting for reply")
+  local _, response = rednet.receive(PROTOCOL, 5)
+  success(inspect.dump(response))
+end
+
 local commands = {
   ["status"] = do_status,
   ["come here"] = do_come_here,
+  ["dig cube"] = do_dig_cube,
 }
 
 function main()
@@ -38,6 +81,7 @@ function main()
 
   local selection = main_menu:display()
   assert(selection)
+  log("--> " .. selection)
 
   local modem_side = libnjw.find_modem()
   assert(modem_side)

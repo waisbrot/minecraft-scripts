@@ -19,9 +19,28 @@ function do_move_to(sender, message)
   return true
 end
 
+function do_dig_cube(sender, message)
+  local coords = {}
+  for i=1,#message.points do
+    table.insert(coords, libturtle.Position:new(message.points[i]))
+  end
+  assert(#message.points == 2)
+  local minx, maxx, miny, maxy, minz, maxy
+  for i=1,#coords do
+    local c = coords[i]
+    if minx == nil or c.x < minx then minx = c.x end
+    if maxx == nil or c.x > maxx then maxx = c.x end
+    if miny == nil or c.y < miny then miny = c.y end
+    if maxy == nil or c.y > maxy then maxy = c.y end
+    if minz == nil or c.z < minz then minz = c.z end
+    if maxz == nil or c.z > maxz then maxz = c.z end
+  end
+end
+
 local commands = {
   status = do_status,
   moveTo = do_move_to,
+  digCube = do_dig_cube,
 }
 
 function start_server(hostname)

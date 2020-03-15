@@ -104,10 +104,15 @@ function Menu:display()
     elseif k == keys.backspace then chose = false
     end
   end
+
+  -- reset display
   self.win.setVisible(false)
   term.setBackgroundColor(self.original_bg)
   term.setTextColor(self.original_fg)
   term.clear()
+  term.setCursorPos(1, 1)
+
+  -- return either the choice or nil
   if chose then
     return self:current_selection()
   else
