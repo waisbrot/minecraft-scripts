@@ -41,8 +41,8 @@ local function read_coordinates_live()
     {x = nil, y = nil, z = nil},
   }
   for i=1,#items do
-    for j in {"x", "y", "z"} do
-      items[i][j] = form.Item:new(j .. tostring(i), [keys.g], gps_callback)
+    for _,j in pairs({"x", "y", "z"}) do
+      items[i][j] = form.Item:new(j .. tostring(i), {keys.g}, gps_callback)
       cform:add(items[i][j])
     end
   end
@@ -87,7 +87,7 @@ function main()
   assert(modem_side)
   rednet.open(modem_side)
   local host = rednet.lookup(PROTOCOL)
-  assert(host)
+  assert(host, "No host found for " .. PROTOCOL)
 
   commands[selection](host)
 end

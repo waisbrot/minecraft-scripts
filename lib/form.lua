@@ -7,9 +7,9 @@ local COLOR_UNFILLED_FG = colors.white
 local COLOR_FILLED_BG = colors.lime
 local COLOR_FILLED_FG = colors.white
 
-local Item = {
+Item = {
   name = "item",
-  callback_keys = [],
+  callback_keys = {},
   callback = nil,
   value = "",
   place = 1,
@@ -31,7 +31,7 @@ end
 
 function Item:redraw(win)
   win.setCursorPos(1, self.place)
-  pen_label(win)
+  gpen_label(win)
   win.write(item.name)
 
   win.setCursorPos(VALUE_POS_X, self.place)
@@ -95,7 +95,7 @@ function Form:pen_unfilled()
 end
 
 function Form:pen_label()
-  pen_label(self.win)
+  gpen_label(self.win)
 end
 
 local function pen_filled(win)
@@ -108,7 +108,7 @@ local function pen_unfilled(win)
   win.setTextColor(COLOR_UNSELECT_FG)
 end
 
-local function pen_label(win)
+local function gpen_label(win)
   win.setBackgroundColor(COLOR_LABEL_BG)
   win.setTextColor(COLOR_LABEL_FG)
 end
