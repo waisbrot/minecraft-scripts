@@ -40,6 +40,8 @@ local function read_coordinates_live()
     {x = nil, y = nil, z = nil},
     {x = nil, y = nil, z = nil},
   }
+  local callbacks = {}
+  callbacks[keys.g] = gps_callback
   for i=1,#items do
     for _,j in pairs({"x", "y", "z"}) do
       items[i][j] = form.Item:new(j .. tostring(i), {keys.g}, gps_callback)

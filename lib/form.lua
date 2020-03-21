@@ -28,19 +28,17 @@ end
 
 Item = {
   name = "item",
-  callback_keys = {},
-  callback = nil,
+  callbacks = nil,
   value = "",
   place = 1,
 }
 
-function Item:new(name, callback_keys, callback)
+function Item:new(name, callbacks)
   assert(#name < 6, "Can't name an item longer than 6 chars")
   local o = {
     place = nil,
     name = name,
-    callback_keys = callback_keys,
-    callback = callback,
+    callbacks = callbacks,
     value = "",
   }
   setmetatable(o, self)
@@ -51,7 +49,7 @@ end
 function Item:redraw(win)
   win.setCursorPos(1, self.place)
   gpen_label(win)
-  win.write(item.name)
+  win.write(self.name)
 
   win.setCursorPos(VALUE_POS_X, self.place)
   if self.value == "" then
@@ -64,11 +62,11 @@ function Item:redraw(win)
 end
 
 function Item:has_callback(key)
-  return self.callback_keys[key] ~= nil
+  return self.callbacks[key] ~= nil
 end
 
 function Item:do_callback(key)
-  local callback_result = self.callback(self.name, key)
+  local callback_result = self.callbacks[key](self.name, key)
   self.value = callback_result.string
 end
 
@@ -78,6 +76,26 @@ end
 
 function Item:append_string(s)
   self.value = self.value .. s
+end
+
+local key_map = {}
+key_map[keys.one] = "1"
+key_map[keys.two] = "2"
+key_map[keys.three] = "3"
+key_map[keys.four] = "4"
+key_map[keys.five] = "5"
+key_map[keys.six] = "6"
+key_map[keys.seven] = "7"
+key_map[keys.eight] = "8"
+key_map[keys.nine] = "9"
+key_map[keys.zero] = "0"
+
+function Item:append_key(k)
+  local s
+  if key_map[k] then s = key_map[k]
+  else s = keys.name(k)
+  end
+  self:append_string(s)
 end
 
 Form = {
@@ -167,7 +185,7 @@ function Form:display()
     elseif k == keys.delete then chose = false
     elseif k == keys.backspace then current_field:backspace()
     elseif current_field:has_callback(k) then current_field:do_callback(k)
-    else current_field:append_string(keys.getName(k))
+    else current_field:append_key(k)
     end
   end
   -- reset display
