@@ -48,25 +48,33 @@ local function read_coordinates_live()
       cform:add(items[i][j])
     end
   end
-  cform:display()
-  local result = {}
-  for i=1,#items do
-    local pos = libturtle.Position:new(math.floor(tonumber(items[i].x.value)),
-                                       math.floor(tonumber(items[i].y.value)),
-                                       math.floor(tonumber(items[i].z.value)))
-    table.insert(result, pos)
+  local chose = cform:display()
+  if chose then
+    local result = {}
+    for i=1,#items do
+      local pos = libturtle.Position:new(math.floor(tonumber(items[i].x.value)),
+                                         math.floor(tonumber(items[i].y.value)),
+                                         math.floor(tonumber(items[i].z.value)))
+      table.insert(result, pos)
+    end
+    return result
+  else
+    return nil
   end
-  return result
 end
 
 local function do_dig_cube(host)
   local coordinates = read_coordinates_live()
-  log("Asking " .. host .. " to dig a cube " .. inspect.dump(coordinates))
-  local request = { command = "digCube", points = coordinates }
-  rednet.send(host, request, PROTOCOL)
-  log("Waiting for reply")
-  local _, response = rednet.receive(PROTOCOL, 5)
-  success(inspect.dump(response))
+  if coordinates then
+    log("Asking " .. host .. " to dig a cube " .. inspect.dump(coordinates))
+    local request = { command = "digCube", points = coordinates }
+    rednet.send(host, request, PROTOCOL)
+    log("Waiting for reply")
+    local _, response = rednet.receive(PROTOCOL, 5)
+    success(inspect.dump(response))
+  else
+    success("User cancelled")
+  end
 end
 
 local commands = {

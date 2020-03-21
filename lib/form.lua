@@ -71,7 +71,7 @@ function Item:do_callback(key)
 end
 
 function Item:backspace(win)
-  self.value = self.value:sub(1, -1)
+  self.value = self.value:sub(1, -2)
   self:redraw(win)
 end
 
@@ -169,7 +169,8 @@ function Form:redraw()
   for i=1,#self.items do
     self.items[i]:redraw(self.win)
   end
-  self.win.setCursorPos(VALUE_POS_X, self.selected)
+  local pos_x = VALUE_POS_X + #self:current_field().value
+  self.win.setCursorPos(pos_x, self.selected)
   self.win.setCursorBlink(true)
 end
 
@@ -196,5 +197,6 @@ function Form:display()
   term.setTextColor(self.original_fg)
   term.clear()
   term.setCursorPos(1, 1)
+  return chose
 end
 
