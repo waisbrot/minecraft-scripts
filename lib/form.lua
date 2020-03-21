@@ -2,10 +2,12 @@ local log = libnjw.log
 
 local VALUE_POS_X = 8
 
-local COLOR_UNFILLED_BG = colors.gray
-local COLOR_UNFILLED_FG = colors.white
-local COLOR_FILLED_BG = colors.lime
-local COLOR_FILLED_FG = colors.white
+local COLOR_UNSELECT_BG = colors.gray
+local COLOR_UNSELECT_FG = colors.white
+local COLOR_SELECT_BG = colors.lime
+local COLOR_SELECT_FG = colors.white
+local COLOR_LABEL_BG = colors.gray
+local COLOR_LABEL_FG = colors.yellow
 
 local function pen_filled(win)
   win.setBackgroundColor(COLOR_SELECT_BG)
