@@ -2,11 +2,13 @@ local log = libnjw.log
 
 local VALUE_POS_X = 8
 
+local COLOR_BG = colors.black
+local COLOR_FG = colors.white
 local COLOR_UNSELECT_BG = colors.gray
 local COLOR_UNSELECT_FG = colors.white
 local COLOR_SELECT_BG = colors.lime
 local COLOR_SELECT_FG = colors.white
-local COLOR_LABEL_BG = colors.gray
+local COLOR_LABEL_BG = COLOR_BG
 local COLOR_LABEL_FG = colors.yellow
 
 local function pen_filled(win)
@@ -94,8 +96,8 @@ function Form:new()
   }
   local w, h = term.getSize()
   o.win = window.create(term.current(), 1, 1, w, h, false)
-  o.win.setBackgroundColor(COLOR_UNFILLED_BG)
-  o.win.setTextColor(COLOR_UNFILLED_FG)
+  o.win.setBackgroundColor(COLOR_BG)
+  o.win.setTextColor(COLOR_FG)
   o.win.clear()
 
   setmetatable(o, self)
