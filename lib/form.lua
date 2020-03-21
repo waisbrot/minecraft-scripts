@@ -147,21 +147,22 @@ function Form:add(form_item)
   table.insert(self.items, form_item)
 end
 
--- TODO: remove this
-function Form:redraw_item(i)
-  local item = self.items[i]
-  self.win.setCursorPos(1, i)
-  self:pen_label()
-  self.win.write(item.name)
-
-  self.win.setCursorPos(VALUE_POS_X, i)
-  if item.value == "" then
-    self:pen_unfilled()
-    self.win.write("      ")
+function Form:up()
+  if self.selected == 1 then
+    self.selected = #self.items
   else
-    self:pen_filled()
-    self.win.write(item.value)
+    self.selected = self.selected - 1
   end
+  self:redraw()
+end
+
+function Form:down()
+  if self.selected == #self.items then
+    self.selected = 1
+  else
+    self.selected = self.selected + 1
+  end
+  self:redraw()
 end
 
 function Form:redraw()
