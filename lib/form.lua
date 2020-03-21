@@ -144,7 +144,6 @@ end
 -- callback returns {string = string to enter in the current field}
 function Form:add(form_item)
   form_item.place = #self.items + 1
-  log("New item = " .. inspect.dump(form_item))
   table.insert(self.items, form_item)
 end
 
