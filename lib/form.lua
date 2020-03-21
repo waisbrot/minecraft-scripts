@@ -70,8 +70,9 @@ function Item:do_callback(key)
   self.value = callback_result.string
 end
 
-function Item:backspace()
+function Item:backspace(win)
   self.value = self.value:sub(1, -1)
+  self:redraw(win)
 end
 
 function Item:append_string(s)
@@ -93,7 +94,7 @@ key_map[keys.zero] = "0"
 function Item:append_key(k)
   local s
   if key_map[k] then s = key_map[k]
-  else s = keys.name(k)
+  else s = keys.getName(k)
   end
   self:append_string(s)
 end
@@ -143,6 +144,7 @@ end
 -- callback returns {string = string to enter in the current field}
 function Form:add(form_item)
   form_item.place = #self.items + 1
+  log("New item = " .. inspect.dump(form_item))
   table.insert(self.items, form_item)
 end
 
@@ -183,7 +185,7 @@ function Form:display()
     elseif k == keys.tab then self:down()
     elseif k == keys.enter then chose = true
     elseif k == keys.delete then chose = false
-    elseif k == keys.backspace then current_field:backspace()
+    elseif k == keys.backspace then current_field:backspace(self.win)
     elseif current_field:has_callback(k) then current_field:do_callback(k)
     else current_field:append_key(k)
     end
