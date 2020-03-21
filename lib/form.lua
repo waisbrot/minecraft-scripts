@@ -7,6 +7,21 @@ local COLOR_UNFILLED_FG = colors.white
 local COLOR_FILLED_BG = colors.lime
 local COLOR_FILLED_FG = colors.white
 
+local function pen_filled(win)
+  win.setBackgroundColor(COLOR_SELECT_BG)
+  win.setTextColor(COLOR_SELECT_FG)
+end
+
+local function pen_unfilled(win)
+  win.setBackgroundColor(COLOR_UNSELECT_BG)
+  win.setTextColor(COLOR_UNSELECT_FG)
+end
+
+local function gpen_label(win)
+  win.setBackgroundColor(COLOR_LABEL_BG)
+  win.setTextColor(COLOR_LABEL_FG)
+end
+
 Item = {
   name = "item",
   callback_keys = {},
@@ -96,21 +111,6 @@ end
 
 function Form:pen_label()
   gpen_label(self.win)
-end
-
-local function pen_filled(win)
-  win.setBackgroundColor(COLOR_SELECT_BG)
-  win.setTextColor(COLOR_SELECT_FG)
-end
-
-local function pen_unfilled(win)
-  win.setBackgroundColor(COLOR_UNSELECT_BG)
-  win.setTextColor(COLOR_UNSELECT_FG)
-end
-
-local function gpen_label(win)
-  win.setBackgroundColor(COLOR_LABEL_BG)
-  win.setTextColor(COLOR_LABEL_FG)
 end
 
 function Form:current_field()
