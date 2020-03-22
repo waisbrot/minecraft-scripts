@@ -36,18 +36,21 @@ function dig_down()
 end
 
 function dig_step(want)
-  if want == "u" then libturtle.dig_up()
-  elseif want == "d" then libturtle.dig_down()
+  if want == "u" then dig_up()
+  elseif want == "d" then dig_down()
   else
+    andup = false
+    anddown = false
     libturtle.change_facing(want)
-    libturtle.dig_forward()
+    dig_forward()
   end
 end
 
 function dig_to(dest)
   local path = pos:path_to(dest)
-  for i=1,#path do
-    dig_step(path[i])
+  log("path = " .. libturtle.stringify_path(path))
+  for _, step in path do
+    dig_step(step)
   end
 end
 
