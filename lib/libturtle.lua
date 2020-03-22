@@ -197,7 +197,7 @@ function dig_up()
       turtle.digUp()
       return true
     else
-      error("Refusing to dig up through " .. data.name)
+      error("Dig up unsafe: " .. data.name)
       return false
     end
   else
@@ -212,7 +212,7 @@ function dig_down()
       turtle.digDown()
       return true
     else
-      error("Refusing to dig down through " .. data.name)
+      error("Dig down unsafe: " .. data.name)
       return false
     end
   else
@@ -227,7 +227,7 @@ function dig_forward()
       turtle.dig()
       return true
     else
-      error("Refusing to dig forward through " .. data.name)
+      error("Dig forward unsafe: " .. data.name)
       return false
     end
   else
