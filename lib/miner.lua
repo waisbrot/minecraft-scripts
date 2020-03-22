@@ -159,9 +159,9 @@ function maybe_resume_digging()
     local codestr = fh:read("*all")
     fh:close()
     local code, msg = loadstring(codestr)
-    assert(code, "Failed to load saved dig: " .. msg)
+    assert(code, "Failed to load saved dig: " .. tostring(msg))
     code()
     log("Resuming dig")
-    dig_cube(saved_dig.pos_min, saved_dig.pos_max)
+    dig_cube(libturtle.Position:new(saved_dig.pos_min), libturtle.Position:new(saved_dig.pos_max))
   end
 end
