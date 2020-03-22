@@ -1,4 +1,5 @@
 local SIDES = {"left", "right", "front", "back"}
+LOG_LEVEL = 5
 
 -- if a modem is connected, return the appropriate side
 -- else return nil
@@ -22,8 +23,11 @@ function cprint(msg, clr)
   term.setTextColor(c)
 end
 
-function log(msg)
-  cprint(msg, colors.cyan)
+function log(msg, level)
+  local level = level or 0
+  if level < LOG_LEVEL then
+    cprint(msg, colors.cyan)
+  end
 end
 
 function success(msg)

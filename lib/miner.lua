@@ -138,11 +138,11 @@ function dig_cube(pmin, pmax)
   end
   local initial_y = pos.y
   local success, msg = pcall(dig_cube_main)
+  log("return to starting level")
+  local dest = pos:clone()
+  dest.y = initial_y
+  libturtle.move_to(dest)
   if not success then
-    log("return to start")
-    local dest = pos:clone()
-    dest.y = initial_y
-    libturtle.move_to(dest)
     save_dig()
     error(msg)
   end

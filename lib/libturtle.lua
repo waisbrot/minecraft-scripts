@@ -309,9 +309,9 @@ function move_to(dest)
   assert(dest)
   log("move from " .. position:tostring() .. " to " .. dest:tostring())
   local path = position:path_to(dest)
-  log("path: " .. stringify_path(path))
+  log("path: " .. stringify_path(path), 5)
   for i=1,#path do
-    log("move: " .. path[i])
+    log("move: " .. path[i], 9)
     move_step(path[i])
   end
   change_facing(dest.facing)
