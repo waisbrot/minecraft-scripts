@@ -19,6 +19,8 @@ SAFE = {
   ["minecraft:netherrack"] = true,
   ["minecraft:soul_sand"] = true,
   ["minecraft:glowstone"] = true,
+  ["projectred-exploration:ore"] = true,
+  ["techreborn:ore"] = true,
 }
 
 -- Everything not listed above is unsafe!
