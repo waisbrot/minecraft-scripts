@@ -29,7 +29,7 @@ function Position:new(x, y, z, facing)
 end
 
 function Position:clone()
-  return Position:new(self.x, self.y, self.z)
+  return Position:new(self.x, self.y, self.z, self.facing)
 end
 
 function Position:tostring()
