@@ -55,27 +55,27 @@ function dig_to(dest)
   end
 end
 
-function dig_z_out()
-  -- dig +z all the way
-  libturtle.change_facing("s")
-  while pos.z <= pos_max.z do
+function dig_x_out()
+  -- dig +x all the way
+  libturtle.change_facing("e")
+  while pos.x <= pos_max.x do
     dig_forward()
   end
 end
 
-function dig_x_one()
-  -- dig x+1
-  libturtle.change_facing("e")
+function dig_z_one()
+  -- dig z+1
+  libturtle.change_facing("s")
   dig_forward()
 end
 
-function dig_z_out_and_back()
-  dig_z_out()
-  -- dig +x one step
-  dig_x_one()
-  -- dig -z all the way
-  libturtle.change_facing("n")
-  while pos.z >= pos_min.z do
+function dig_x_out_and_back()
+  dig_x_out()
+  -- dig +z one step
+  dig_z_one()
+  -- dig -x all the way
+  libturtle.change_facing("w")
+  while pos.x >= pos_min.x do
     dig_forward()
   end
 end
@@ -95,17 +95,17 @@ function dig_cube(pmin, pmax)
   while pos.y <= pos_max.y do
     log("dig y = " .. tostring(pos.y))
     local start_pos = pos:clone()
-    while pos.x <= (pos_max.x - 1) do
-      log("dig x = " .. tostring(pos.x))
-      dig_z_out_and_back()
-      if pos.x < pos_max.x then
-        -- dig +x one step to prep for next move
-        dig_x_one()
+    while pos.z <= (pos_max.z - 1) do
+      log("dig z = " .. tostring(pos.z))
+      dig_x_out_and_back()
+      if pos.z < pos_max.z then
+        -- dig +z one step to prep for next move
+        dig_z_one()
       end
     end
-    if pos.x < pos_max.x then
+    if pos.z == pos_max.z then
       -- dig a half-row
-      dig_z_out()
+      dig_x_out()
     end
     -- this whole level is clear, reset position and move up
     libturtle.move_to(start_pos)
