@@ -45,7 +45,7 @@ function dig_step(want)
 end
 
 function dig_to(dest)
-  local path = path_to(dest)
+  local path = pos:path_to(dest)
   for i=1,#path do
     dig_step(path[i])
   end
@@ -79,15 +79,20 @@ end
 function dig_cube(pmin, pmax)
   pos_min = pmin
   pos_max = pmax
+  pos_min.facing = pos_min.facing or "s"
+  pos_max.facing = pos_max.facing or "s"
   log("Going to start")
   dig_to(pos_min)
   if pos_min.y < pos_max.y then
+    log("up one from the floor")
     dig_up()
     anddown = true
   end
   while pos.y <= pos_max.y do
+    log("dig y = " .. tostring(pos.y))
     local start_pos = pos:clone()
     while pos.x <= (pos_max.x - 1) do
+      log("dig x = " .. tostring(pos.x))
       dig_z_out_and_back()
       if pos.x < pos_max.x then
         -- dig +x one step to prep for next move
