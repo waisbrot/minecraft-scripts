@@ -37,7 +37,7 @@ function Position:tostring()
 end
 
 function Position:serialize()
-  return "{x=" .. self.x .. ",y=" .. self.y ",z=" .. self.z .. "facing=" .. self.facing .. "}"
+  return string.format("{x=%d,y=%d,z=%d,facing=%s}", self.x, self.y, self.z, self.facing)
 end
 
 position = Position:new()
