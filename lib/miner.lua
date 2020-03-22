@@ -36,6 +36,7 @@ function dig_down()
 end
 
 function dig_step(want)
+  log("dig_step(" .. want .. ")")
   if want == "u" then dig_up()
   elseif want == "d" then dig_down()
   else
@@ -49,7 +50,7 @@ end
 function dig_to(dest)
   local path = pos:path_to(dest)
   log("path = " .. libturtle.stringify_path(path))
-  for _, step in path do
+  for _, step in pairs(path) do
     dig_step(step)
   end
 end

@@ -27,9 +27,9 @@ end
 
 local function gps_callback(name, key)
   local x, y, z = gps.locate(5)
-  if name:sub(1, 1) == "x" then return {string = tostring(x)}
-  elseif name:sub(1, 1) == "y" then return {string = tostring(y)}
-  elseif name:sub(1, 1) == "z" then return {string = tostring(z)}
+  if name:sub(1, 1) == "x" then return {string = tostring(math.floor(x))}
+  elseif name:sub(1, 1) == "y" then return {string = tostring(math.floor(y))}
+  elseif name:sub(1, 1) == "z" then return {string = tostring(math.floor(z))}
   else error("Bad field name")
   end
 end
