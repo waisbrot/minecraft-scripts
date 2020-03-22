@@ -80,18 +80,7 @@ function dig_x_out_and_back()
   end
 end
 
-function dig_cube(pmin, pmax)
-  pos_min = pmin
-  pos_max = pmax
-  pos_min.facing = pos_min.facing or "s"
-  pos_max.facing = pos_max.facing or "s"
-  log("Going to start")
-  dig_to(pos_min)
-  if pos_min.y < pos_max.y then
-    log("up one from the floor")
-    dig_up()
-    anddown = true
-  end
+local function dig_cube_main()
   while pos.y <= pos_max.y do
     log("dig y = " .. tostring(pos.y))
     local start_pos = pos:clone()
@@ -123,5 +112,28 @@ function dig_cube(pmin, pmax)
       anddown = false
       dig_up()
     end
+  end
+end
+
+function dig_cube(pmin, pmax)
+  pos_min = pmin
+  pos_max = pmax
+  pos_min.facing = pos_min.facing or "s"
+  pos_max.facing = pos_max.facing or "s"
+  log("Going to start")
+  dig_to(pos_min)
+  if pos_min.y < pos_max.y then
+    log("up one from the floor")
+    dig_up()
+    anddown = true
+  end
+  local initial_y = pos.y
+  local success, msg = pcall(dig_cube_main)
+  if not success then
+    log("return to start")
+    local dest = pos:clone()
+    dest.y = initial_y
+    libturtle.move_to(dest)
+    error(msg)
   end
 end
