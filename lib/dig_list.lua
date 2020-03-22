@@ -8,6 +8,7 @@ SAFE = {
   ["minecraft:grass"] = true,
   ["minecraft:gravel"] = true,
   ["minecraft:ice"] = true,
+  ["minecraft:iron_ore"] = true,
   ["minecraft:lapis_ore"] = true,
   ["minecraft:lit_redstone_ore"] = true,
   ["minecraft:netherrack"] = true,
