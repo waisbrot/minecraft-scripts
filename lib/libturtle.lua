@@ -193,7 +193,7 @@ end
 function dig_up()
   local success, data = turtle.inspectUp()
   if success then
-    if dig_list.safe[data.name] then
+    if dig_list.SAFE[data.name] then
       turtle.digUp()
       return true
     else
@@ -208,7 +208,7 @@ end
 function dig_down()
   local success, data = turtle.inspectDown()
   if success then
-    if dig_list.safe[data.name] then
+    if dig_list.SAFE[data.name] then
       turtle.digDown()
       return true
     else
@@ -223,7 +223,7 @@ end
 function dig_forward()
   local success, data = turtle.inspect()
   if success then
-    if dig_list.safe[data.name] then
+    if dig_list.SAFE[data.name] then
       turtle.dig()
       return true
     else
