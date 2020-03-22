@@ -2,6 +2,7 @@
 local pos_max
 local pos_min
 local pos = libturtle.position
+local log = libnjw.log
 
 -- when digging forward, also dig up and down?
 -- assume we'll set anddown manually, but set andup when using dig_up
