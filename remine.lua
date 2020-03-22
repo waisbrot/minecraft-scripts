@@ -35,6 +35,9 @@ function do_dig_cube(sender, message)
     if minz == nil or c.z < minz then minz = c.z end
     if maxz == nil or c.z > maxz then maxz = c.z end
   end
+  local pmin = libturtle.Position:new(minx, miny, minz)
+  local pmax = libturtle.Position:new(maxx, maxy, maxz)
+  miner.dig_cube(pmin, pmax)
 end
 
 local commands = {

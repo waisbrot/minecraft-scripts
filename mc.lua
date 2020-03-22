@@ -66,7 +66,7 @@ end
 local function do_dig_cube(host)
   local coordinates = read_coordinates_live()
   if coordinates then
-    log("Asking " .. host .. " to dig a cube " .. inspect.dump(coordinates))
+    log("Asking " .. host .. " to dig a cube " .. coordinates[1]:tostring() .. ";" .. coordinates[2]:tostring())
     local request = { command = "digCube", points = coordinates }
     rednet.send(host, request, PROTOCOL)
     log("Waiting for reply")

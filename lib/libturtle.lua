@@ -191,42 +191,47 @@ function ensure_oriented()
 end
 
 function dig_up()
-  turtle.digUp()
-  up()
-end
-
-function dig_down()
-  turtle.digDown()
-  down()
-end
-
-function dig_forward()
-  while turtle.dig() do end
-  forward()
-  turtle.digUp()
-  turtle.digDown()
-end
-
-function dig_row(size)
-  for i=1,size do
-    dig_forward()
+  local success, data = turtle.inspectUp()
+  if success then
+    if dig_list.safe[data.name] then
+      turtle.digUp()
+      return true
+    else
+      error("Refusing to dig up through " .. data.name)
+      return false
+    end
+  else
+    return true
   end
 end
 
-function dig_out_back(size)
-  dig_row(size)
-  left()
-  dig_forward()
-  left()
-  dig_row(size)
-  right()
-  dig_forward()
-  right()
+function dig_down()
+  local success, data = turtle.inspectDown()
+  if success then
+    if dig_list.safe[data.name] then
+      turtle.digDown()
+      return true
+    else
+      error("Refusing to dig down through " .. data.name)
+      return false
+    end
+  else
+    return true
+  end
 end
 
-function dig_rows(count, length)
-  for i=1,(count/2) do
-    dig_out_back(length)
+function dig_forward()
+  local success, data = turtle.inspect()
+  if success then
+    if dig_list.safe[data.name] then
+      turtle.dig()
+      return true
+    else
+      error("Refusing to dig forward through " .. data.name)
+      return false
+    end
+  else
+    return true
   end
 end
 
@@ -301,36 +306,4 @@ function move_to(dest)
     move_step(path[i])
   end
   change_facing(dest.facing)
-end
-
-function dig_step(want)
-  if want == "u" then dig_up()
-  elseif want == "d" then dig_down()
-  else
-    change_facing(want)
-    dig_forward()
-  end
-end
-
-function dig_to(dest)
-  local path = path_to(dest)
-  for i=1,#path do
-    dig_step(path[i])
-  end
-end
-
-function dig_space(wx, wy, wz)
-  assert(wy >= 3, "Must be at least 3 blocks high")
-  assert(wy == 3, "Larger than height 3 unimplemented")
-  orient()
---  local found, item = turtle.inspectDown()
---  assert(found, "Need to start hovering over a chest")
---  assert(item.name == "minecraft:chest", "Need to start hovering over a chest")
-  local start = Coordinates(position.x, position.y, position.z)
-  local start_face = position.facing
-  if position.facing == "n" or position.facing == "s" then dig_rows(wx, wz)
-  else dig_rows(wz, wx)
-  end
-  move_to(start)
-  change_facing(start_face)
 end

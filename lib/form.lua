@@ -54,7 +54,7 @@ function Item:redraw(win)
   win.setCursorPos(VALUE_POS_X, self.place)
   if self.value == "" then
     pen_unfilled(win)
-    win.write("      ")
+    win.write("          ")
   else
     pen_filled(win)
     win.write(self.value)
