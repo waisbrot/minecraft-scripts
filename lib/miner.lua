@@ -118,14 +118,9 @@ end
 local FILENAME = "/saved_dig.lua"
 
 local function save_dig()
+  local outstring = string.format("saved_dig = {\n pos_min = %s,\n pos_max = %s\n}\n", pos_min:serialize(), pos_max:serialize())
   local fh = assert(io.open(FILENAME, "w"))
-  fh:write("saved_dig = {")
-  fh:write("pos_min = ")
-  fh:write(pos_min:serialize())
-  fh:write(",")
-  fh:write("pos_max = ")
-  fh:write(pos_max:serialize())
-  fh:write"}"
+  fh:write(outstring)
   fh:close()
 end
 
