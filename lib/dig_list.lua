@@ -21,6 +21,7 @@ SAFE = {
   ["minecraft:glowstone"] = true,
   ["projectred-exploration:ore"] = true,
   ["techreborn:ore"] = true,
+  ["thermalfoundation:ore"] = true,
 }
 
 -- Everything not listed above is unsafe!

@@ -119,8 +119,13 @@ local FILENAME = "/saved_dig.lua"
 
 local function save_dig()
   local fh = assert(io.open(FILENAME, "w"))
-  fh:write("saved_dig = ")
-  fh:write(inspect.dump({pos_min = pos_min, pos_max = pos_max}))
+  fh:write("saved_dig = {")
+  fh:write("pos_min = ")
+  fh:write(pos_min:serialize())
+  fh:write(",")
+  fh:write("pos_max = ")
+  fh:write(pos_max:serialize())
+  fh:write"}"
   fh:close()
 end
 
@@ -153,7 +158,8 @@ function maybe_resume_digging()
   if fh then
     local codestr = fh:read("*all")
     fh:close()
-    local code = assert(loadstring(codestr), "Failed to load saved dig")
+    local code, msg = loadstring(codestr)
+    assert(code, "Failed to load saved dig: " .. msg)
     code()
     log("Resuming dig")
     dig_cube(saved_dig.pos_min, saved_dig.pos_max)

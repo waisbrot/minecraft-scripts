@@ -36,6 +36,10 @@ function Position:tostring()
   return "(" .. tostring(self.x) .. "," .. tostring(self.y) .. "," .. tostring(self.z) .. ")" .. ":" .. tostring(self.facing)
 end
 
+function Position:serialize()
+  return "{x=" .. self.x .. ",y=" .. self.y ",z=" .. self.z .. "facing=" .. self.facing .. "}"
+end
+
 position = Position:new()
 
 function Position:validate()
