@@ -115,6 +115,15 @@ local function dig_cube_main()
   end
 end
 
+local FILENAME = "/saved_dig.lua"
+
+local function save_dig()
+  local fh = assert(io.open(FILENAME, "w"))
+  fh:write("saved_dig = ")
+  fh:write(inspect.dump({pos_min = pos_min, pos_max = pos_max}))
+  fh:close()
+end
+
 function dig_cube(pmin, pmax)
   pos_min = pmin
   pos_max = pmax
@@ -134,6 +143,19 @@ function dig_cube(pmin, pmax)
     local dest = pos:clone()
     dest.y = initial_y
     libturtle.move_to(dest)
+    save_dig()
     error(msg)
+  end
+end
+
+function maybe_resume_digging()
+  local fh = io.open(FILENAME, "r")
+  if fh then
+    local codestr = fh:read("*all")
+    fh:close()
+    local code = assert(loadstring(codestr), "Failed to load saved dig")
+    code()
+    log("Resuming dig")
+    dig_cube(saved_dig.pos_min, saved_dig.pos_max)
   end
 end

@@ -54,6 +54,7 @@ function start_server(hostname)
   rednet.open(modem_side)
   rednet.host("remine", hostname)
   log("Registered as "..hostname)
+  miner.maybe_resume_digging()
   local continue = true
   while continue do
     log("Waiting for remote command C-T to exit")
