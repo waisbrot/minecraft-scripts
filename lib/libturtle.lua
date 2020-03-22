@@ -231,7 +231,7 @@ function dig_forward()
       return false
     end
   else
-    return true
+    return false
   end
 end
 
