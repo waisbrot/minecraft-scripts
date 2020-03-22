@@ -166,6 +166,11 @@ function orient()
   position.x, position.y, position.z = gps.locate(10)
   assert(position.x, "GPS location failed!")
   log("Find facing...")
+  for i=1,3 do
+    if turtle.detect() then
+      turtle.turnLeft()
+    end
+  end
   assert(turtle.forward(), "No space in front of the turtle! Start the turtle with an empty space in front of it.")
   local xp, yp, zp = gps.locate(10)
   assert(xp, "GPS second location failed!")
