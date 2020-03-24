@@ -118,13 +118,13 @@ end
 local FILENAME = "/saved_dig.lua"
 
 local function save_dig()
-  local outstring = string.format("saved_dig = {\n pos_min = %s,\n pos_max = %s\n}\n", pos_min:serialize(), pos_max:serialize())
+  local outstring = string.format("saved_dig = {\n pos_min = %s,\n pos_max = %s,\n y = %d,\n}\n", pos_min:serialize(), pos_max:serialize(), pos.y)
   local fh = assert(io.open(FILENAME, "w"))
   fh:write(outstring)
   fh:close()
 end
 
-function dig_cube(pmin, pmax)
+function dig_cube(pmin, pmax, jump_y)
   pos_min = pmin
   pos_max = pmax
   pos_min.facing = pos_min.facing or "s"
@@ -137,13 +137,18 @@ function dig_cube(pmin, pmax)
     anddown = true
   end
   local initial_y = pos.y
+  while jump_y and jump_y > pos.y do
+    libturtle.up()
+  end
   local success, msg = pcall(dig_cube_main)
+  if not success then
+    save_dig()
+  end
   log("return to starting level")
   local dest = pos:clone()
   dest.y = initial_y
   libturtle.move_to(dest)
   if not success then
-    save_dig()
     error(msg)
   end
 end
