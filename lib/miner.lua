@@ -162,6 +162,6 @@ function maybe_resume_digging()
     assert(code, "Failed to load saved dig: " .. tostring(msg))
     code()
     log("Resuming dig")
-    dig_cube(libturtle.Position:new(saved_dig.pos_min), libturtle.Position:new(saved_dig.pos_max))
+    dig_cube(libturtle.Position:new(saved_dig.pos_min), libturtle.Position:new(saved_dig.pos_max), saved_dig.y)
   end
 end
