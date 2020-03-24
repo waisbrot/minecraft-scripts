@@ -5,6 +5,7 @@ SAFE = {
   ["minecraft:diamond_ore"] = true,
   ["minecraft:dirt"] = true,
   ["minecraft:glowstone"] = true,
+  ["minecraft:gold_ore"] = true,
   ["minecraft:grass"] = true,
   ["minecraft:gravel"] = true,
   ["minecraft:ice"] = true,
