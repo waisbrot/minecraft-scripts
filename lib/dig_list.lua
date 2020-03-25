@@ -26,6 +26,7 @@ SAFE = {
   ["projectred-exploration:ore"] = true,
   ["techreborn:ore"] = true,
   ["thermalfoundation:ore"] = true,
+  ["modularforcefieldsystem:monazit_ore"] = true,
 }
 
 -- Everything not listed above is unsafe!
